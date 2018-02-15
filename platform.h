@@ -1,3 +1,4 @@
+#pragma once
 
 #define __PLATFORM_WINDOWS     0
 #define __PLATFORM_LINUX       1

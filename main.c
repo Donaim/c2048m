@@ -1,6 +1,7 @@
 
 #include "helper.c"
 #include "screen.c"
+#include "test.c"
 
 void parse_key(KEY key) {
     // printf("%d", key);
@@ -15,10 +16,17 @@ void parse_key(KEY key) {
             break;
     }
 }
+void spawn_cell() {
+
+}
 
 int main() {
-
+    init_screen();
+    init_logics();
+    randomize_table();
+    
     while(true) {
+        spawn_cell();
         printscreen();
         
         KEY key = getkey();

@@ -18,7 +18,7 @@
             "label": "build",
             "dependsOn": "clean",
             "type": "shell",
-            "command": "gcc main.c -l pthread",
+            "command": "gcc -fPIC main.c -l pthread -lm",
             "presentation": {
                 "echo": true,
                 "reveal": "silent",
