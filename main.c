@@ -2,29 +2,28 @@
 #include "helper.c"
 #include "screen.c"
 
-int hx = 2, hy = 2;
-
-void hero_move(KEY key) {
-    screen[hx][hy] = ' ';
-    printf("%d", key);
+void parse_key(KEY key) {
+    // printf("%d", key);
     switch(key) {
-        case KEY_UP: hy--;
-        case KEY_DOWN: hy++;
-        case KEY_LEFT: hx--;
-        case KEY_RIGHT: hx++;
+        case KEY_UP: 
+            break;
+        case KEY_DOWN: 
+            break;
+        case KEY_LEFT: 
+            break;
+        case KEY_RIGHT: 
+            break;
     }
-    screen[hx][hy] = 'S';
 }
 
 int main() {
-    initframe();
-
-    loop_async(printscreen, 10);
 
     while(true) {
+        printscreen();
+        
         KEY key = getkey();
         if (key == KEY_ESC) return 0;
-        else hero_move(key);
+        else parse_key(key);
     }
 
     return 0;

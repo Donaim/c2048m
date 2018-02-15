@@ -3,6 +3,8 @@
 #include <pthread.h>
 #include <stdio.h>
 
+#include "platform.h"
+
 int nsleep(int ms) {
     int sec = ms / 1000;
     ms %= 1000;
@@ -77,5 +79,18 @@ KEY getkey() {
 //     move(0, 0);
 // }
 void clearscreen() {
-    system("clear");
+    switch(__PLATFORM_CURRENT) {
+        case __PLATFORM_WINDOWS: {
+            system("cls");
+            return;
+        }
+        case __PLATFORM_LINUX:
+        case __PLATFORM_BSD: {
+            system("clear");
+            return;
+        }
+        default:
+            system("echo \"dont know how to clear the screen\"");
+            return;
+    }
 }

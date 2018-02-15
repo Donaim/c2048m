@@ -9,8 +9,8 @@
             "command": "rm -rf *.out",
             "presentation": {
                 "echo": true,
-                "reveal": "never",
-                "focus": false,
+                "reveal": "silent",
+                "focus": true,
                 "panel": "shared"
             }
         },
@@ -21,8 +21,8 @@
             "command": "gcc main.c -l pthread",
             "presentation": {
                 "echo": true,
-                "reveal": "never",
-                "focus": false,
+                "reveal": "silent",
+                "focus": true,
                 "panel": "shared"
             }
         },
@@ -37,8 +37,8 @@
             },
             "presentation": {
                 "echo": true,
-                "reveal": "never",
-                "focus": false,
+                "reveal": "silent",
+                "focus": true,
                 "panel": "shared"
             }
         }
