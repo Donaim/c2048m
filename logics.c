@@ -4,8 +4,11 @@
 #include <math.h>
 #include <stdbool.h>
 
+#include "screen.c"
+
 
 double rand01() { return rand() / (double)RAND_MAX; }
+int randr(int min, int max) { return rand01() * (max - min) + min; }
 
 bool is_prime(int x) {
     if (x < 4) { return true; }
@@ -21,28 +24,42 @@ int nth_prime(int n) {
     }
 }
 
-/* 
-    bigger RAND_RATE generates bigger primes and vice-versa
-    dont set it bigger than 1.649
-*/
-
-double powi(int x, int y) {
-    int re = 1;
-    while (y-- > 0) {
-        re *= x;
-    }
-    return (double)re;
-}
-
-/// 1 - (0.1) , 1 - (0.1 / 2)
-#define RAND_RATE 1
+#define RAND_RATE 1.0 /* */
+#define RAND_DEG 1.8 /* */
 int rand_cell() {
     double r = rand01();
-    for (int i = 0; true; i++) {
-        if (RAND_RATE / powi(2, i) < r) { return nth_prime(i); }
+    for (double i = 0, div = 1; i < 100; i++, div *= RAND_DEG) {
+        if (RAND_RATE / div < r) { return nth_prime((int)i); }
     }
 }
 
+
+int count_empty() {
+    int re = 0;
+    for (int x = 0; x < W; x++) {
+        for (int y = 0; y < H; y++) {
+            if (screen[x][y] == 0) { re++; }
+        }
+    }   
+    return re;
+}
+void spawn_at_free(int free_index, int value) {
+    int ind = 0;
+    for (int x = 0; x < W; x++) {
+        for (int y = 0; y < H; y++) {
+            if (screen[x][y] == 0) { ind++; }
+            if (ind == free_index) { screen[x][y] = value; return; }
+        }
+    }
+}
+void spawn_cell() {
+    int empty = count_empty();
+    if (empty <= 0) { return; } // no free space
+
+    int r = randr(1, empty + 1);
+    int cell = rand_cell();
+    spawn_at_free(r, cell);
+}
 
 void init_logics() {
     srand(time(0));

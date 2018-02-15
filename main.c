@@ -16,14 +16,11 @@ void parse_key(KEY key) {
             break;
     }
 }
-void spawn_cell() {
-
-}
 
 int main() {
     init_screen();
     init_logics();
-    randomize_table();
+    // randomize_table();
     
     while(true) {
         spawn_cell();
