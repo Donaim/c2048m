@@ -5,24 +5,7 @@
 #include <stdbool.h>
 
 #include "screen.c"
-
-
-double rand01() { return rand() / (double)RAND_MAX; }
-int randr(int min, int max) { return rand01() * (max - min) + min; }
-
-bool is_prime(int x) {
-    if (x < 4) { return true; }
-    for (int i = 2, to = x / 2; i <= to; i++) {
-        if (x % i == 0) { return false; }
-    }
-    return true;
-}
-int nth_prime(int n) {
-    for (int i = 2, count = 0; true; i++) {
-        if (is_prime(i)) { count++; }
-        if (count >= n) { return i; }
-    }
-}
+#include "lhelpers.c"
 
 #define RAND_RATE 1.0 /* */
 #define RAND_DEG 1.8 /* */
@@ -59,6 +42,18 @@ void spawn_cell() {
     int r = randr(1, empty + 1);
     int cell = rand_cell();
     spawn_at_free(r, cell);
+}
+void shift(int xd, int yd) {
+    for (int x = 0; x < W; x++) {
+        for (int y = 0; y < H; y++) {
+            int xn = x + xd;
+            int yn = y + yd;
+            if ((xn < 0 || xn >= W) || (yn < 0 || yn >= H)) { continue; }
+            
+            screen[xn][yn] += screen[x][y];
+            screen[x][y] = 0;
+        }
+    }
 }
 
 void init_logics() {
