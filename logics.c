@@ -15,17 +15,31 @@ bool is_prime(int x) {
     return true;
 }
 int nth_prime(int n) {
-    for (int i = 1, count = 0; true; i++) {
+    for (int i = 2, count = 0; true; i++) {
         if (is_prime(i)) { count++; }
         if (count >= n) { return i; }
     }
 }
 
-#define RAND_RATE 2.5 /* RAND_RATE close to zero generates big primes and vice-versa */
+/* 
+    bigger RAND_RATE generates bigger primes and vice-versa
+    dont set it bigger than 1.649
+*/
+
+double powi(int x, int y) {
+    int re = 1;
+    while (y-- > 0) {
+        re *= x;
+    }
+    return (double)re;
+}
+
+/// 1 - (0.1) , 1 - (0.1 / 2)
+#define RAND_RATE 1
 int rand_cell() {
     double r = rand01();
-    for (int i = 1; true; i++) {
-        if (1.0 / pow((double)i, RAND_RATE) < r) { return nth_prime(i); }
+    for (int i = 0; true; i++) {
+        if (RAND_RATE / powi(2, i) < r) { return nth_prime(i); }
     }
 }
 
