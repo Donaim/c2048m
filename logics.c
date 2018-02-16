@@ -43,6 +43,11 @@ void spawn_cell() {
     int cell = rand_cell();
     spawn_at_free(r, cell);
 }
+bool can_shift(int from, int to) {
+    if (to == 0) { return true; }
+    else if (from == to) { return true; }
+    else { return false; }
+}
 void shift(int xd, int yd) {
 
     int xfrom, xto, xinc, yfrom, yto, yinc;
@@ -70,9 +75,10 @@ void shift(int xd, int yd) {
             int xn = x + xd;
             int yn = y + yd;
             if ((xn < 0 || xn >= W) || (yn < 0 || yn >= H)) { continue; }
-
-            screen[xn][yn] += screen[x][y];
-            screen[x][y] = 0;
+            if (can_shift(screen[x][y], screen[xn][yn])) {
+                screen[xn][yn] += screen[x][y];
+                screen[x][y] = 0;
+            }
         }
     }
 }
