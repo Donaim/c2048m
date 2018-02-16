@@ -44,12 +44,33 @@ void spawn_cell() {
     spawn_at_free(r, cell);
 }
 void shift(int xd, int yd) {
-    for (int x = 0; x < W; x++) {
-        for (int y = 0; y < H; y++) {
+
+    int xfrom, xto, xinc, yfrom, yto, yinc;
+    if (xd < 0) {
+        xfrom = 0;
+        xto = W;
+        xinc = 1;
+    } else {
+        xfrom = W - 1;
+        xto = -1;
+        xinc = -1;
+    }
+    if (yd < 0) {
+        yfrom = 0;
+        yto = H;
+        yinc = 1;
+    } else {
+        yfrom = H - 1;
+        yto = -1;
+        yinc = -1;
+    }
+
+    for (int x = xfrom; x != xto; x += xinc) {
+        for (int y = yfrom; y != yto; y += yinc) {
             int xn = x + xd;
             int yn = y + yd;
             if ((xn < 0 || xn >= W) || (yn < 0 || yn >= H)) { continue; }
-            
+
             screen[xn][yn] += screen[x][y];
             screen[x][y] = 0;
         }

@@ -28,8 +28,8 @@ int main() {
     // randomize_table();
     
     while(true) {
-        spawn_cell();
         printscreen();
+        spawn_cell();
         
         KEY key = getkey();
         if (key == KEY_ESC) return 0;
