@@ -4,10 +4,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define W 5
-#define H 5
-int screen[W][H];
-int screen_copy[W][H];
+int W = -1, H = -1;
+int ** screen;
+int ** screen_copy;
 
 void screen_make_copy() {
     for (int x = 0; x < W; x++) {
@@ -25,11 +24,19 @@ void screen_from_copy() {
 }
 
 void init_screen() {
+    screen = (int**)malloc(W * sizeof(int*));
+    screen_copy = (int**)malloc(W * sizeof(int*));
+    for (int y = 0; y < W; y++) {
+        screen[y] = (int*)malloc(H * sizeof(int));
+        screen_copy[y] = (int*)malloc(H * sizeof(int));
+    }
     for (int x = 0; x < W; x++) {
         for (int y = 0; y < H; y++) {
             screen[x][y] = 0;
         }
     }
+
+    printf("Initialized %dx%d screen grid\n", W, H);
 }
 
 void printscreen() {

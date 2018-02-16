@@ -1,5 +1,6 @@
 #pragma once
 #include <stdlib.h>
+#include <stdbool.h>
 
 double rand01() { return rand() / (double)RAND_MAX; }
 int randr(int min, int max) { return rand01() * (max - min) + min; }

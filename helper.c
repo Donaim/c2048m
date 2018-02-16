@@ -1,56 +1,33 @@
 #pragma once
 
 #include <stdlib.h>
-#include <time.h>
-#include <pthread.h>
 #include <stdio.h>
 
 #include "platform.h"
 
-int nsleep(int ms) {
-    int sec = ms / 1000;
-    ms %= 1000;
-
-    struct timespec ts;
-    ts.tv_sec = sec;
-    ts.tv_nsec = ms * 1000000L;
-    return nanosleep(&ts, NULL);
-}
-
-typedef struct {
-    int interval;
-    void (* func) ();
-} __loop_props;
-
-void * __loop_async(void * obj) {
-    __loop_props * p = (__loop_props*) obj;
-    int interval = p->interval;
-    void (* func) () = p->func;
-
-    while(1) {
-        func();
-        nsleep(interval);
-    }
-
-    return NULL;
-}
-
-void loop_async(void (*f)(), int interval) {
-    pthread_t th;
-
-    __loop_props * p = (__loop_props*) malloc(sizeof(__loop_props));
-    p->interval = interval;
-    p->func = f;
-
-    pthread_create(&th, NULL, __loop_async, p);
-}
-
 char readchar() {
-    system ("/bin/stty raw");
-    char c = getchar();
-    system ("/bin/stty cooked");
+    char c = 0;
+    switch(__PLATFORM_CURRENT) {
+        case __PLATFORM_WINDOWS: {
+            c = getchar();
+            break;
+        }
+        case __PLATFORM_LINUX:
+        case __PLATFORM_BSD: {
+            system ("/bin/stty raw");
+            c = getchar();
+            system ("/bin/stty cooked");
+            break;
+        }
+        default:
+            fprintf(stderr, "dont know how to read a char on this os");
+            fflush(stderr);
+            break;
+    }
+    if (__PLATFORM_CURRENT)
     return c;
 }
+
 typedef enum { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_ESC, KEY_UNKNOWN } KEY;
 KEY getkey() {
     char c = readchar();
@@ -70,16 +47,6 @@ KEY getkey() {
     }
 }
 
-// #include <unistd.h>
-// void clearscreen() /* https://stackoverflow.com/questions/2347770/how-do-you-clear-the-console-screen-in-c */
-// {
-//   const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-//   write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
-// }
-// #include <curses.h> // need -l ncurses
-// void clearscreen() {
-//     move(0, 0);
-// }
 void clearscreen() {
     switch(__PLATFORM_CURRENT) {
         case __PLATFORM_WINDOWS: {
@@ -92,7 +59,8 @@ void clearscreen() {
             return;
         }
         default:
-            system("echo \"dont know how to clear the screen\"");
+            fprintf(stderr, "dont know how to clear the screen on this os");
+            fflush(stderr);
             return;
     }
 }
